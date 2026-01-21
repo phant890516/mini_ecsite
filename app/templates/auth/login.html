@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}ログイン{% endblock %}
+{% block content %}
+
+    <h2>ログイン</h2>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    
+    <form action="{{ url_for('auth.login') }}" method ="POST">
+        <table border="1">
+            <tr>
+                <td>ユーザー名：</td>
+                <td><input type="text" name="username" value={{account.ID}}></td>
+            </tr>
+            <tr>
+                <td>パスワード：</td>
+                <td><input type="password" name="password" value={{account.password}}></td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="ログイン">
+    </form>
+    <form action="/" method = "GET">
+        <input type="submit" value="戻る">
+    </form>
+
+{% endblock %}

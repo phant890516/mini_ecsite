@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ECサイト{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1><a href="{{ url_for('index') }}">商品管理システム</a></h1>
+        <nav>
+            <a href="{{ url_for('index') }}">ホーム</a> | 
+            <a href="{{ url_for('products.list') }}">商品一覧</a> | 
+            <a href="{{ url_for('products.cart') }}">カート</a>
+
+            {% if username %}
+                | <span>ようこそ、<b>{{ username }}</b>さん</span>
+                | <a href="{{ url_for('auth.logout') }}">ログアウト</a>
+                
+                {% if role == 'admin' %}
+                    | <a href="{{ url_for('products.admin_list') }}">[管理者メニュー]</a>
+                {% endif %}
+            {% else %}
+                | <a href="{{ url_for('auth.login') }}">ログイン</a>
+            {% endif %}
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; 2025 PY24 Class.</p>
+    </footer>
+</body>
+</html>
