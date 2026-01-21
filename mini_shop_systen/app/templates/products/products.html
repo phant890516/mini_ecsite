@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}商品一覧{% endblock %}
+{% block content %}
+    <h2>商品一覧</h2>
+    
+    <form action="/products" method="get">
+        <input type="text" name="keyword" placeholder="商品名で検索">
+        <input type="submit" value="検索">
+    </form>
+
+    <table border="1">
+
+    {% if products %}
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>商品名</th>
+            <th>価格</th>
+            <th>詳細</th>
+            <th>カート</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td>
+                <form action="/products/detail/{{product.id}}" method="GET">
+                    <input type="submit" value="詳細">
+                </form>
+            </td>
+            <td>
+                <form action="/products/add_cart/{{product.id}}" method="POST">
+                    <input type="submit" value="カートに入れる">
+                </form>
+            </td>  
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h1>該当する商品が見つかりません。</h1>
+    {% endif%}
+
+    <br>
+    </table>
+
+    <p>
+        <form action="/" method="GET">
+            <input type="submit" value="TOPに戻る">
+        </form>
+        <nav>
+            {% if total_pages > 1 %}
+                {% for i in range(1,total_pages + 1 ) %}
+                    {% if i == current_page %}
+                        <strong>{{i}}</strong>
+                    {% else %}
+                        <a href="/products?keyword={{keyword}}&page={{i}}">{{i}}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </nav>
+    </p>
+{% endblock %}

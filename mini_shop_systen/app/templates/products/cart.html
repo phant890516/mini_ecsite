@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}ショッピングカート{% endblock %}
+{% block content %}
+    <h2>ショッピングカート</h2>
+    
+    {% if cart_items %}
+        <table border="1">
+            <tr>
+                <th>商品名</th><th>価格</th><th>数量</th><th>小計</th><th>操作</th>
+            </tr>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}円</td>
+                <td>{{item.count}}
+                    <form action="{{ url_for('products.update_cart',product_id=item.id) }}" method="post" style="display:inline;">
+                            <button type="button" class="dec-btn" data-target="count-{{ loop.index0 }}">−</button>
+                            <input id="count-{{ loop.index0 }}" type="number" name="count" value="{{ item.count }}" min="1" style="width:60px;">
+                            <button type="button" class="inc-btn" data-target="count-{{ loop.index0 }}">＋</button>
+                            <input type="submit" value="更新">
+                    </form>      
+                </td>
+                <td>{{ item.subtotal }}円</td>
+                <td>
+                    <form action="{{ url_for('products.delete_from_cart',product_id=item.id) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="product_id" value="{{ item.id }}">
+                        <input type="hidden" name="action" value="delete">
+                        <button type="submit">削除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" align="right"><strong>合計</strong></td>
+                <td colspan="2"><strong>{{ total }}円</strong></td>
+            </tr>
+        </table>
+        <p>
+            <button onclick="alert('購入機能は未実装です')">購入手続きへ</button>
+        </p>
+    {% else %}
+        <p>カートに商品は入っていません。</p>
+    {% endif %}
+    
+    <p><a href="{{ url_for('products.list') }}">買い物を続ける</a></p>
+
+    <script>
+    document.addEventListener('click', function(e){
+        if(e.target.matches('.inc-btn')){
+            const target = e.target.dataset.target;
+            const input = document.getElementById(target);
+            if(input){
+                input.value = parseInt(input.value || 0) + 1;
+            }
+        } else if(e.target.matches('.dec-btn')){
+            const target = e.target.dataset.target;
+            const input = document.getElementById(target);
+            if(input){
+                let v = parseInt(input.value || 0);
+                if(v > 1) input.value = v - 1;
+            }
+        }
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}【管理】商品一覧{% endblock %}
+{% block content %}
+    <h2>【管理者用】商品一覧</h2>
+    <p><a href="{{ url_for('products.add') }}">[+ 新規商品登録]</a></p>
+    {% if products %}
+    <table border="1">
+        <tr>
+            <th>ID</th><th>商品名</th><th>価格</th><th>編集</th><th>削除</th>
+        </tr>
+    
+        {% for product in products %}
+        <tr>
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+
+            <td>
+                <form action="/products/edit/{{product.id}}" method="GET">
+                    <input type="submit" value="編集">
+                </form>
+            </td>
+            <td>
+                <form action="/products/delete/{{product.id}}" method="POST">
+                    <input type="submit" value="削除">
+                </form>
+            </td>  
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h1>該当する商品が見つかりません。</h1>
+    {% endif%}
+
+    <br>
+    </table>
+
+
+{% endblock %}
